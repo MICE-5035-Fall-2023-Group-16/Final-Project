@@ -11,13 +11,13 @@ filter_otus_from_otu_table.py -i otus/otu_table_rarefied.biom -o otus/otu_table_
 ### List of steps
 
 1. Make a new folder to put the data.
-```
+```bash
 mkdir final_project
 cd final_project
 ```
 
 2. Run SHI7 (like in Tutorial 1).
-```
+```bash
 # run shi7 on the paired-end wgs data, keep separate fasta files in the output
 time python3 /home/knightsd/public/shi7/shi7.py -i /home/mice5035/public/2023-fall/classdata/rawdata/ -o wgs-output --combine_fasta False
 
@@ -30,14 +30,14 @@ cd ..
 ```
 
 3. Load software.
-```
+```bash
 module load qiime/1.9.1_centos7
 module load bowtie2
 module load kraken
 ```
 
 4. Run Kraken.
-```
+```bash
 mkdir kraken-out
 
 # loop through every .fna file. Run kraken2 on it.
@@ -45,7 +45,7 @@ for f in wgs-output/*.fna; do echo $f; time kraken2 --db /home/knightsd/public/m
 ```
 
 5. Merge the separate Kraken outputs to taxon tables.
-```
+```bash
 # Now we have a single output file per sample;
 # we can merge these using the script kraken2table.py in this repo:
 wget https://raw.githubusercontent.com/danknights/mice5035/master/scripts/kraken2table.py
@@ -53,41 +53,41 @@ python kraken2table.py kraken-out/*.txt taxon_tables
 ```
 
 6. Convert each taxonomy table to biom format if you want to perform beta diversity and alpha diversity analysis using QIIME.
-```
+```bash
 for f in taxon_tables/*.txt; do echo $f; biom convert -i $f --to-json -o `dirname $f`/`basename $f .txt`.biom --process-obs-metadata taxonomy; done
 ```
 
 7. Get a summary of the OTU species table to determine a good depth cutoff for rarefaction.
-```
+```bash
 biom summarize-table -i taxon_tables/taxa_table_L7.biom -o stats_before_filtering.txt
 ```
 
 8. Rarefy species-level taxon table.
-```
+```bash
 # Perform rarefaction
 single_rarefaction.py -i taxon_tables/taxa_table_L7.biom -d 8448 -o taxon_tables/taxa_table_L7_rarefied.biom
 ```
 
 9. Filter rarefied taxon table.
-```
+```bash
 # filter species in < 2 samples
 filter_otus_from_otu_table.py -i taxon_tables/taxa_table_L7_rarefied.biom -o taxon_tables/taxa_table_L7_final.biom -s 2
 ```
 
 10. Get a summary of the final OTU species table.
-```
+```bash
 biom summarize-table -i taxon_tables/taxa_table_L7.biom -o stats_after_filtering.txt
 ```
 
 11. Run alpha and beta diversity analyses on final taxon table.
-```
+```bash
 # run alpha and beta diversity analysis without tree-based metrics
 alpha_diversity.py -m "chao1,observed_otus,shannon" -i taxon_tables/taxa_table_L7_final.biom -o alpha-diversity.txt
 beta_diversity.py -i taxon_tables/taxa_table_L7_final.biom -o beta -m "bray_curtis,binary_jaccard"
 ```
 
 12. Create emperor visualization graphs.
-```
+```bash
 # Optionally run principal coordinates and 3D plots
 # can also do this in R as in Tutorial 5
 principal_coordinates.py -i beta/bray_curtis_taxa_table_L7_final.txt -o beta/bray_curtis_taxa_table_L7_final_pc.txt
