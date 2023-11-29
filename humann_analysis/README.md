@@ -1,6 +1,8 @@
+⚠️STILL A WORK IN PROGRESS⚠️
+
 ## Installing Miniconda on MSI
 
-The following commands to install Miniconda are taken from https://docs.conda.io/projects/miniconda/en/latest/ under *Follow the steps under Quick command line install* > *Linux*.
+The following commands to install Miniconda are taken from https://docs.conda.io/projects/miniconda/en/latest/ under *Quick command line install* > *Linux*.
 
 ```bash
 mkdir -p ~/miniconda3
@@ -14,7 +16,7 @@ rm -rf ~/miniconda3/miniconda.sh
 
 ## Installing HUMANN on MSI
 
-Follow the commands in under *Install via conda* at the [instructions page](https://huttenhower.sph.harvard.edu/humann/)
+Follow the commands under *Install via conda* in the [instructions page](https://huttenhower.sph.harvard.edu/humann/)
 
 ## Upgrading databases
 You will need to upgrade your databases for HUMANN to work on your data. The following commands to upgrade databases are taken from https://huttenhower.sph.harvard.edu/humann/ under *Upgrading your databases*.
