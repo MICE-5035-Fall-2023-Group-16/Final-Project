@@ -59,7 +59,7 @@ for f in taxon_tables/*.txt; do echo $f; biom convert -i $f --to-json -o `dirnam
 
 7. Get a summary of the OTU species table to determine a good depth cutoff for rarefaction.
 ```
-biom summarize-table -i taxon_tables/taxa_table_L7.biom -o stats.txt
+biom summarize-table -i taxon_tables/taxa_table_L7.biom -o stats_before_filtering.txt
 ```
 
 8. Rarefy species-level taxon table.
@@ -74,14 +74,19 @@ single_rarefaction.py -i taxon_tables/taxa_table_L7.biom -d 8448 -o taxon_tables
 filter_otus_from_otu_table.py -i taxon_tables/taxa_table_L7_rarefied.biom -o taxon_tables/taxa_table_L7_final.biom -s 2
 ```
 
-10. Run alpha and beta diversity analyses on final taxon table.
+10. Get a summary of the final OTU species table.
+```
+biom summarize-table -i taxon_tables/taxa_table_L7.biom -o stats_after_filtering.txt
+```
+
+11. Run alpha and beta diversity analyses on final taxon table.
 ```
 # run alpha and beta diversity analysis without tree-based metrics
 alpha_diversity.py -m "chao1,observed_otus,shannon" -i taxon_tables/taxa_table_L7_final.biom -o alpha-diversity.txt
 beta_diversity.py -i taxon_tables/taxa_table_L7_final.biom -o beta -m "bray_curtis,binary_jaccard"
 ```
 
-11. Create emperor visualization graphs.
+12. Create emperor visualization graphs.
 ```
 # Optionally run principal coordinates and 3D plots
 # can also do this in R as in Tutorial 5
