@@ -12,8 +12,8 @@ filter_otus_from_otu_table.py -i otus/otu_table_rarefied.biom -o otus/otu_table_
 
 1. Make a new folder to put the data.
 ```bash
-mkdir final_project
-cd final_project
+mkdir wgs-kraken
+cd wgs-kraken
 ```
 
 2. Run SHI7 (like in Tutorial 1).
