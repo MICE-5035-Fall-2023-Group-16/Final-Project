@@ -17,6 +17,7 @@ rm -rf ~/miniconda3/miniconda.sh
 ## Installing HUMANN on MSI
 
 Follow the commands under *Install via conda* in the [instructions page](https://huttenhower.sph.harvard.edu/humann/)
+(Note: install via pypi works best)
 
 ## Upgrading databases
 You will need to upgrade your databases for HUMANN to work on your data. The following commands to upgrade databases are taken from https://huttenhower.sph.harvard.edu/humann/ under *Upgrading your databases*.
