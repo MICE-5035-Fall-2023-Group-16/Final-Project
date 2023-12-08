@@ -17,7 +17,7 @@ rm -rf ~/miniconda3/miniconda.sh
 ## Installing HUMANN on MSI
 
 Follow the commands under *Install via conda* in the [instructions page](https://huttenhower.sph.harvard.edu/humann/)
-(Note: install via pypi works best)
+</br>(Note: install via pypi works best)
 
 ## Upgrading databases
 You will need to upgrade your databases for HUMANN to work on your data. The following commands to upgrade databases are taken from https://huttenhower.sph.harvard.edu/humann/ under *Upgrading your databases*.
@@ -43,7 +43,12 @@ mkdir humann_output
 cp -r /home/mice5035/public/2023-fall/classdata .
 ```
 
-3. Run HUMANN.
+3. Load bowtie2 software.
+```bash
+module load bowtie2
+```
+
+4. Run HUMANN.
 ```bash
 # run humans with 4 threads on each input file; can adjust if more CPUs are available
 for f in classdata/rawdata/*R1.fastq.gz ; do echo $/f; /usr/bin/time -v humann -i $f -o humann_output -v --threads 4; done
@@ -51,14 +56,14 @@ for f in classdata/rawdata/*R1.fastq.gz ; do echo $/f; /usr/bin/time -v humann -
 cd humann_output
 ```
 
-4. Normalize output.
+5. Normalize output.
 ```bash
 # These steps are for normalizing output
 for f in *genefamilies.tsv; do echo $f; humann_renorm_table --input $f --output `basename $f .tsv`_relab.tsv; done
 for f in *pathabundance.tsv; do echo $f; humann_renorm_table --input $f --output `basename $f .tsv`_relab.tsv; done
 ```
 
-5. Merge output tables into a single table.
+6. Merge output tables into a single table.
 ```bash
 # these steps are for merging all of the per-sample
 # output tables into a single table per output type
@@ -70,7 +75,7 @@ echo "join path abundance..."
 humann_join_tables --input . --output humann_pathabundance.tsv --file_name pathabundance_relab
 ```
 
-6. Remove taxonomic labeled genes.
+7. Remove taxonomic labeled genes.
 ```bash
 # remove taxonomic labeled genes, just retain total count per gene
 # this reduces file size and can make the analysis easier
