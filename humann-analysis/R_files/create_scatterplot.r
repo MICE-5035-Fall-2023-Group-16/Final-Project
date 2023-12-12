@@ -70,8 +70,12 @@ plot(map$diversity_score,sample_pathways_df$count,main="Diet diversity vs. pathw
 legend("topleft",legend="Sample",c="darkorange1",pch=16,cex=0.75)
 abline(lm(sample_pathways_df$count ~ map$diversity_score))
 
-# Save data frames to text files
+# Save data frames to csv files
 colnames(wilcox_df) <- c("pathway","p_value","is_significant")
 write.csv(wilcox_df,"./wilcox_df.csv",row.names=FALSE,quote=FALSE)
 write.csv(sig_pathways_df,"./sig_pathways_df.csv",row.names=FALSE,quote=FALSE)
 write.csv(sample_pathways_df,"./sample_pathways_df.csv",row.names=FALSE,quote=FALSE)
+
+# Save pathways with a significant p-value (< 0.005) to csv file
+significant <- subset(wilcox_df,is_significant==TRUE,select=-is_significant)
+write.csv(significant,"./wilcox_significant_df.csv",row.names=FALSE,quote=FALSE)
