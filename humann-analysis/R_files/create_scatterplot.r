@@ -65,3 +65,7 @@ sample_pathways_df <- sample_pathways_df[!is.na(sample_pathways_df$count),]
 plot(map$diversity_score,sample_pathways_df$count,main="Diet diversity vs. pathway abundance",xlab="Diversity score",ylab="Abundance level",col="darkorange1",pch=16)
 legend("topleft",legend="Sample",c="darkorange1",pch=16,cex=0.75)
 abline(lm(sample_pathways_df$count ~ map$diversity_score))
+
+# Save data frames to text files
+write.table(sig_pathways_df,"./sig_pathways_df.txt",row.names=FALSE,quote=FALSE)
+write.table(sample_pathways_df,"./sample_pathways_df.txt",row.names=FALSE,quote=FALSE)
