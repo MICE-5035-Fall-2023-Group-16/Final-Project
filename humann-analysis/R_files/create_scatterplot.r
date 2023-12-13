@@ -56,7 +56,7 @@ pathway_counts_per_sample <- setNames(pathway_counts_per_sample, map$sample_id)
 for (pathway in sig_pathways_df$pathway) {
   for (id in map$sample_id) {
     if (selected_pathways[id, pathway] > 0) {
-      pathway_counts_per_sample[id] <- pathway_counts_per_sample[id] + 1
+      pathway_counts_per_sample[id] <- pathway_counts_per_sample[id] + selected_pathways[id, pathway]
     }
   }
 }
@@ -66,7 +66,7 @@ sample_pathways_df <- data.frame(sample_id=names(pathway_counts_per_sample),coun
 sample_pathways_df <- sample_pathways_df[!is.na(sample_pathways_df$count),]
 
 # Create a scatter plot of diet diversity vs. pathway abundance
-plot(map$diversity_score,sample_pathways_df$count,main="Diet diversity vs. pathway abundance",xlab="Diversity score",ylab="Abundance level",col="darkorange1",pch=16)
+plot(map$diversity_score,sample_pathways_df$count,main="Pathway abundance vs. Diet diversity",xlab="Diversity score",ylab="Total pathways",col="darkorange1",pch=16)
 legend("topleft",legend="Sample",c="darkorange1",pch=16,cex=0.75)
 abline(lm(sample_pathways_df$count ~ map$diversity_score))
 

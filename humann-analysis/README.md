@@ -1,5 +1,3 @@
-⚠️STILL A WORK IN PROGRESS⚠️
-
 ## Installing Miniconda on MSI
 
 The following commands to install Miniconda are taken from https://docs.conda.io/projects/miniconda/en/latest/ under *Quick command line install* > *Linux*.
@@ -20,6 +18,7 @@ Follow the commands under *Install via conda* in the [instructions page](https:/
 </br>(Note: install via pypi works best)
 
 ## Upgrading databases
+
 You will need to upgrade your databases for HUMANN to work on your data. The following commands to upgrade databases are taken from https://huttenhower.sph.harvard.edu/humann/ under *Upgrading your databases*.
 ```bash
 humann_databases --download chocophlan full /path/to/databases --update-config yes
@@ -29,13 +28,24 @@ humann_databases --download utility_mapping full /path/to/databases --update-con
 
 Note: You can find `/path/to/databases` by running `humann -help` then copying the `DEFAULT` value of a database flag (i.e., –nucleotide-database, –protein-database) excluding the endfile of the path. Might look something like: `/home/mice5035/x500/miniconda3/envs/biobakery3/lib/python3.7/site-packages/humann/data/`
 
-## Note: May need to increase memory for humann to properly run
+## Running HUMANN on MSI
+
+<p>0. May need to increase memory for HUMANN to properly run</p>
 
 ```bash
 srun -N 1 --ntasks-per-node=4 --mem-per-cpu=60gb -t 10:00:00 -p interactive --pty bash
 ```
-
-## Running HUMANN on MSI
+Can also run in the background.
+```bash
+# login to a specific node ("ln1001" instead of "login")
+ssh yourusername@ln1001.msi.umn.edu
+  
+screen # open a "screen" session which will persist
+srun …. # request interactive session for eg 8 hours
+long commands… # start the long command running
+<ctrl>-a d # detach from screen
+exit # close connection to login node
+```
 
 1. Make a new folder to put the data.
 ```bash
