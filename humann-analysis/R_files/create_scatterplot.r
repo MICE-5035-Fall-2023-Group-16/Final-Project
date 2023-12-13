@@ -66,8 +66,8 @@ sample_pathways_df <- data.frame(sample_id=names(pathway_counts_per_sample),coun
 sample_pathways_df <- sample_pathways_df[!is.na(sample_pathways_df$count),]
 
 # Create a scatter plot of diet diversity vs. pathway abundance
-plot(map$diversity_score,sample_pathways_df$count,main="Pathway abundance vs. Diet diversity",xlab="Diversity score",ylab="Total pathways",col="darkorange1",pch=16)
-legend("topleft",legend="Sample",c="darkorange1",pch=16,cex=0.75)
+plot(map$diversity_score,sample_pathways_df$count,main="Pathway abundance vs. Diet diversity",xlab="Diversity score",ylab="Total pathways",col="black",bg="darkorange1",pch=21,cex=1.45)
+legend("topleft",legend="Sample",col="black",pt.bg="darkorange1",pch=21)
 abline(lm(sample_pathways_df$count ~ map$diversity_score))
 
 # Save data frames to csv files
