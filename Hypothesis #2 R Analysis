@@ -1,0 +1,42 @@
+common.rownames <- intersect(rownames(map),rownames(species))
+map <- map[common.rownames,]
+species <- species[common.rownames,]
+alpha <- alpha[common.rownames,]
+beta <- beta[common.rownames,common.rownames]
+# read the table
+species <- read.delim('core-analysis/taxon_tables/taxa_table_L7.txt',row=1)
+# drop the last column
+species <- species[,-ncol(species)]
+# transpose the table (so rows are samples)
+species <- t(species)
+# load preprocess data tables
+map <- read.delim('class-metadata-v2.txt', head=T, row=1,as.is=FALSE)
+alpha <- read.delim(url("https://raw.githubusercontent.com/MICE-5035-Fall-2023-Group-16/Final-Project/main/preprocessing/wgs-kraken/alpha-diversity.txt"), row=1)
+
+beta <- read.delim(url("https://raw.githubusercontent.com/MICE-5035-Fall-2023-Group-16/Final-Project/main/preprocessing/wgs-kraken/bray_curtis_taxa_table_L7_final.txt"),row=1)
+library(‘vegan’)
+library(‘car’)
+#run adonis2 to test whether differences in beta diversity are related to number of roommates, then again to see if it is related to number of pets
+ adonis2(beta ~ map$num_roommates, data=map)
+adonis2(beta ~ map$pets, data=map)
+#Test if variation in beta diversity is associated with number of roommates or number of pets
+# do number of roommates first
+adonis2(beta ~ map$num_roommates + map$pets, data=map)
+#run again with number of pets first 
+adonis2(beta ~ map$pets + map$num_roommates, data=map)
+# get subsetted diversity scores
+div <- alpha$shannon
+#run an ANOVA with number of roommates listed first
+#Focus on p-values for number of pets
+anova(lm(div ~ map$num_roommates * map$pets))
+#run an ANOVA with number of pets listed first
+#Focus on p-value for number of roommates
+anova(lm(div ~ map$pets * map$num_roommates))
+#Histogram of alpha diversity values 
+ hist(alpha$shannon)
+#Run shapiro test for non-normality
+shapiro.test(alpha$shannon)
+#boxplot of alpha diversity split by number of roommates
+ boxplot(alpha$shannon ~ map$num_roommates)
+#boxplot of alpha diversity split by number of pets
+boxplot(alpha$shannon ~ map$pets)
