@@ -1,42 +1,60 @@
+# Match row names
 common.rownames <- intersect(rownames(map),rownames(species))
+
+# Keep common rows
 map <- map[common.rownames,]
 species <- species[common.rownames,]
 alpha <- alpha[common.rownames,]
 beta <- beta[common.rownames,common.rownames]
-# read the table
+
+# Read in table
 species <- read.delim('core-analysis/taxon_tables/taxa_table_L7.txt',row=1)
-# drop the last column
+
+# Drop the last column
 species <- species[,-ncol(species)]
-# transpose the table (so rows are samples)
+
+# Transpose the table (so rows are samples)
 species <- t(species)
-# load preprocessed data tables
+
+# Load preprocessed data tables
 map <- read.delim('class-metadata-v2.txt', head=T, row=1,as.is=FALSE)
 alpha <- read.delim(url("https://raw.githubusercontent.com/MICE-5035-Fall-2023-Group-16/Final-Project/main/preprocessing/wgs-kraken/alpha-diversity.txt"), row=1)
-
 beta <- read.delim(url("https://raw.githubusercontent.com/MICE-5035-Fall-2023-Group-16/Final-Project/main/preprocessing/wgs-kraken/bray_curtis_taxa_table_L7_final.txt"),row=1)
+
+# Load packages
 library(‘vegan’)
 library(‘car’)
-#run adonis2 to test whether differences in beta diversity are related to number of roommates, then again to see if it is related to number of pets
- adonis2(beta ~ map$num_roommates, data=map)
-adonis2(beta ~ map$pets, data=map)
-#Test if variation in beta diversity is associated with number of roommates or number of pets
-# do number of roommates first
-adonis2(beta ~ map$num_roommates + map$pets, data=map)
-#run again with number of pets first 
-adonis2(beta ~ map$pets + map$num_roommates, data=map)
-# get subsetted diversity scores
-div <- alpha$shannon
-#run an ANOVA with number of roommates listed first
-#Focus on p-values for number of pets
-anova(lm(div ~ map$num_roommates * map$pets))
-#run an ANOVA with number of pets listed first
-#Focus on p-value for number of roommates
-anova(lm(div ~ map$pets * map$num_roommates))
-#Histogram of alpha diversity values 
- hist(alpha$shannon)
-#Run shapiro test for non-normality
+
+# Histogram of alpha diversity values 
+ hist(alpha$shannon, col = "maroon1", xlab = "Shannon Diversity", main = "Distribution of Shannon Diversity")
+
+# Run shapiro test for non-normality
 shapiro.test(alpha$shannon)
-#boxplot of alpha diversity split by number of roommates
- boxplot(alpha$shannon ~ map$num_roommates)
+
+# Boxplot of alpha diversity by number of roommates
+boxplot(alpha$shannon ~ map$num_roommates, col = c("maroon1", "lightsalmon1", "cyan2"), xlab = "Number of Roomates", ylab = "Shannon Diversity")
 #boxplot of alpha diversity split by number of pets
-boxplot(alpha$shannon ~ map$pets)
+boxplot(alpha$shannon ~ map$pets, col = c("lightsalmon1", "cyan2"), xlab = "Pet Owner", ylab = "Shannon Diversity")
+
+# Subsetted data
+div <- alpha$shannon
+rmt <- map$num_roommates
+pet <- map$pets
+
+#Run adonis2 to test whether differences in beta diversity are related to variables
+adonis2(beta ~ rmt, data=map) # Numerical roommates
+adonis2(beta ~ map$num_roommates_Cat, data=map) # Categorical roommates
+adonis2(beta ~ pet, data=map) # Categorical pets
+
+# Test if variation in beta diversity is associated with number of roommates or presence of pets
+# Number of roommates first
+adonis2(beta ~ rmt + pet, data=map)
+# Presence of pets first 
+adonis2(beta ~ pet + rmt, data=map)
+
+# Run an ANOVA with number of roommates listed first
+# Focus on p-values for number of pets
+anova(lm(div ~ rmt * pet))
+# Run an ANOVA with presence of pets listed first
+# Focus on p-value for number of roommates
+anova(lm(div ~ pet * rmt))
