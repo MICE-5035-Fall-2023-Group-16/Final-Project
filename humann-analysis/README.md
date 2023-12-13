@@ -29,6 +29,12 @@ humann_databases --download utility_mapping full /path/to/databases --update-con
 
 Note: You can find `/path/to/databases` by running `humann -help` then copying the `DEFAULT` value of a database flag (i.e., –nucleotide-database, –protein-database) excluding the endfile of the path. Might look something like: `/home/mice5035/x500/miniconda3/envs/biobakery3/lib/python3.7/site-packages/humann/data/`
 
+## Note: May need to increase memory for humann to properly run
+
+```bash
+srun -N 1 --ntasks-per-node=4 --mem-per-cpu=60gb -t 10:00:00 -p interactive --pty bash
+```
+
 ## Running HUMANN on MSI
 
 1. Make a new folder to put the data.
