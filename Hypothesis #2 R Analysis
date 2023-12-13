@@ -9,7 +9,7 @@ species <- read.delim('core-analysis/taxon_tables/taxa_table_L7.txt',row=1)
 species <- species[,-ncol(species)]
 # transpose the table (so rows are samples)
 species <- t(species)
-# load preprocess data tables
+# load preprocessed data tables
 map <- read.delim('class-metadata-v2.txt', head=T, row=1,as.is=FALSE)
 alpha <- read.delim(url("https://raw.githubusercontent.com/MICE-5035-Fall-2023-Group-16/Final-Project/main/preprocessing/wgs-kraken/alpha-diversity.txt"), row=1)
 
